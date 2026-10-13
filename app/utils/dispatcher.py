@@ -23,7 +23,12 @@ class Dispatcher:
         for name, validator in self.validators.items():
             try:
                 res = await validator(data)
-                results.append({"validator": name, "passed": res.get("valid", False), "errors": res.get("errors", [])})
+                results.append({
+                    "validator": name,
+                    "passed": res.get("valid", False),
+                    "errors": res.get("errors", []),
+                    "degraded": res.get("degraded", False),
+                })
             except Exception as e:
                 logger.error(f"Error running validator {name}: {e}")
                 results.append({"validator": name, "passed": False, "errors": [str(e)]})
